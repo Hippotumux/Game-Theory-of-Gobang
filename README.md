@@ -2,6 +2,13 @@
 
 # <center> 五子棋博弈算法 </center>
 
+Abstract—Gobang, an abstract strategy board game, is played
+on a 15x15 Go board where the objective is to connect five stones
+in a row to win. I aspire to create a program similar to AlphaGo,
+allowing the computer to play chess against me, therefore I am
+motivated to develop my own computerized Gobang game for
+challenging player interactions. Therefore, this project involves
+developing a computerized Gobang game.
 
 ## 本章內容
 
