@@ -16,7 +16,7 @@ int main(void) {
 
         game.chessboard[player1.choose_x][player1.choose_y] = player1.player;
         game.showboard();
-        if (player1.checkwin()) {
+        if (player1.checkwin(player1.choose_x, player1.choose_y, player1.player)) {
             std::cout << "player1 win";
             return 0;
         }
@@ -26,8 +26,8 @@ int main(void) {
         }while(game.chessboard[player2.choose_x][player2.choose_y] != 0);
 
         game.chessboard[player2.choose_x][player2.choose_y] = player2.player;
-                if (player1.checkwin()) {
-            std::cout << "player1 win";
+        if (player2.checkwin(player2.choose_x, player2.choose_y, player2.player)) {
+            std::cout << "player2 win";
             return 0;
         }
     }
