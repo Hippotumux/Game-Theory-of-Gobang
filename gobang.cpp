@@ -17,7 +17,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = -1 ; shift >= -5, pos_x + shift > 0 ; shift --) {
         if (this->chessboard[pos_x + shift][pos_y] == player) {
             sum_leftright += 1;
-        } else if (this->chessboard[pos_x + shift][pos_y] == 0){
+        } else if (this->chessboard[pos_x + shift][pos_y] == 0) {
             sum_leftright_live += 1;
             break;
         } else {
@@ -27,7 +27,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = -1 ; shift >= -5 && pos_y + shift > 0 ; shift --) {
         if (this->chessboard[pos_x][pos_y + shift] == player) {
             sum_updown += 1;
-        } else if (this->chessboard[pos_x][pos_y + shift] == 0){
+        } else if (this->chessboard[pos_x][pos_y + shift] == 0) {
             sum_updown_live += 1;
             break;
         } else {
@@ -37,7 +37,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = 1; shift <= 5 && pos_x + shift <= 15 ; shift ++) {
         if (this->chessboard[pos_x + shift][pos_y] == player) {
             sum_leftright += 1;
-        } else if (this->chessboard[pos_x + shift][pos_y] == 0){
+        } else if (this->chessboard[pos_x + shift][pos_y] == 0) {
             sum_leftright_live += 1;
             break;
         } else {
@@ -47,7 +47,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = 1; shift <= 5 && pos_x + shift <= 15 ; shift ++) {    
         if (this->chessboard[pos_x][pos_y + shift] == player) {
             sum_updown += 1;
-        } else if (this->chessboard[pos_x][pos_y + shift] == 0){
+        } else if (this->chessboard[pos_x][pos_y + shift] == 0) {
             sum_updown_live += 1;
             break;
         } else {
@@ -60,7 +60,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = -1 ; shift >= -5 && pos_x + shift > 0 && pos_y + shift > 0; shift --) {
         if (this->chessboard[pos_x + shift][pos_y + shift] == player) {
             sum_leftup += 1;
-        } else if (this->chessboard[pos_x + shift][pos_y + shift] == 0){
+        } else if (this->chessboard[pos_x + shift][pos_y + shift] == 0) {
             sum_leftup_live += 1;
             break;
         } else {
@@ -71,7 +71,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = -1 ; shift >= -5 && pos_x + shift > 0 && pos_y - shift <= 15; shift --) {
         if (this->chessboard[pos_x + shift][pos_y - shift] == player) {
             sum_rightup += 1;
-        } else if (this->chessboard[pos_x + shift][pos_y - shift] == 0){
+        } else if (this->chessboard[pos_x + shift][pos_y - shift] == 0) {
             sum_rightup_live += 1;
             break;
         } else {
@@ -82,7 +82,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = 1; shift <= 5 && pos_x + shift <= 15 && pos_y + shift <= 15 ; shift ++) {
         if (this->chessboard[pos_x + shift][pos_y + shift] == player) {
             sum_leftup += 1;
-        } else if (this->chessboard[pos_x + shift][pos_y + shift] == 0){
+        } else if (this->chessboard[pos_x + shift][pos_y + shift] == 0) {
             sum_leftup_live += 1;
             break;
         } else {
@@ -92,7 +92,7 @@ std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int play
     for (int shift = 1; shift <= 5 && pos_x + shift <= 15 && pos_y - shift > 0 ; shift ++) {
         if (this->chessboard[pos_x + shift][pos_y - shift] == player) {
             sum_rightup += 1;
-        } else if (this->chessboard[pos_x + shift][pos_y - shift] == 0){
+        } else if (this->chessboard[pos_x + shift][pos_y - shift] == 0) {
             sum_rightup_live += 1;
             break;
         } else {
@@ -138,12 +138,15 @@ void user::_init_(int player){
 }
 
 // init computer player
-void computer::_init_(int player) {
+void computer::_init_(int player, int round_size, int max_depth) {
     this->player = player;
+    this->round_size = round_size;
+    this->max_depth = max_depth;
 }
 
 
 // Computer choose
 void computer::Computer_Choose() {
-
+    this->best_value = -1e8;
+    this->minmax_algorithm(1, this->max_depth, this->player);
 }

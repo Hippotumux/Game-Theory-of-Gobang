@@ -2,8 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <algorithm>
 #include <cstring>
+#include "game_algorithm.h"
 
 typedef std::pair<int,int> chess_coordinate;
 
@@ -41,13 +41,12 @@ public:
     void _init_(int player);
 };
 
-class computer: public Chess
+class computer: public Chess, public game_algorithm
 {
 public:
-    int choose_x, choose_y, player;
-    void _init_(int player);
-    std::pair<int,int> Computer_Choose(int* point);
-}
+    void _init_(int player, int round_size, int max_depth);
+    void Computer_Choose();
+};
 
 /*
 class minmax_algorithm : public Chess
