@@ -1,4 +1,3 @@
-#include <iostream>
 #include "gobang.h"
 
 void Chess::showboard() {
@@ -12,10 +11,10 @@ void Chess::showboard() {
     }
 }
 
-std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
+std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y, int player) {
     // left to right and up to doun
-    int sum_leftright = 0, sum_leftright_live = 0, sum_updown = 0, sum_updown_live = 0;
-    for (int shift = -1 ; shift >= -5 ; shift --) {
+    int sum_leftright = 1, sum_leftright_live = 0, sum_updown = 1, sum_updown_live = 0;
+    for (int shift = -1 ; shift >= -5, pos_x + shift > 0 ; shift --) {
         if (this->chessboard[pos_x + shift][pos_y] == player) {
             sum_leftright += 1;
         } else if (this->chessboard[pos_x + shift][pos_y] == 0){
@@ -24,7 +23,8 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
         } else {
             break;
         }
-
+    }
+    for (int shift = -1 ; shift >= -5 && pos_y + shift > 0 ; shift --) {
         if (this->chessboard[pos_x][pos_y + shift] == player) {
             sum_updown += 1;
         } else if (this->chessboard[pos_x][pos_y + shift] == 0){
@@ -34,8 +34,7 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
             break;
         }
     }
-
-    for (int shift = 1; shift <= 5 ; shift ++) {
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 ; shift ++) {
         if (this->chessboard[pos_x + shift][pos_y] == player) {
             sum_leftright += 1;
         } else if (this->chessboard[pos_x + shift][pos_y] == 0){
@@ -44,7 +43,8 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
         } else {
             break;
         }
-        
+    }
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 ; shift ++) {    
         if (this->chessboard[pos_x][pos_y + shift] == player) {
             sum_updown += 1;
         } else if (this->chessboard[pos_x][pos_y + shift] == 0){
@@ -56,8 +56,8 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
     }
 
     // left up to left down and right down to right up 
-    int sum_leftup = 0, sum_leftup_live = 0, sum_rightup = 0, sum_rightup_live = 0;
-    for (int shift = -1 ; shift >= -5 ; shift --) {
+    int sum_leftup = 1, sum_leftup_live = 0, sum_rightup = 1, sum_rightup_live = 0;
+    for (int shift = -1 ; shift >= -5 && pos_x + shift > 0 && pos_y + shift > 0; shift --) {
         if (this->chessboard[pos_x + shift][pos_y + shift] == player) {
             sum_leftup += 1;
         } else if (this->chessboard[pos_x + shift][pos_y + shift] == 0){
@@ -66,7 +66,9 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
         } else {
             break;
         }
+    }
 
+    for (int shift = -1 ; shift >= -5 && pos_x + shift > 0 && pos_y - shift <= 15; shift --) {
         if (this->chessboard[pos_x + shift][pos_y - shift] == player) {
             sum_rightup += 1;
         } else if (this->chessboard[pos_x + shift][pos_y - shift] == 0){
@@ -77,7 +79,7 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
         }
     }
 
-    for (int shift = 1; shift <= 5 ; shift ++) {
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 && pos_y + shift <= 15 ; shift ++) {
         if (this->chessboard[pos_x + shift][pos_y + shift] == player) {
             sum_leftup += 1;
         } else if (this->chessboard[pos_x + shift][pos_y + shift] == 0){
@@ -86,7 +88,8 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
         } else {
             break;
         }
-
+    }
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 && pos_y - shift > 0 ; shift ++) {
         if (this->chessboard[pos_x + shift][pos_y - shift] == player) {
             sum_rightup += 1;
         } else if (this->chessboard[pos_x + shift][pos_y - shift] == 0){
@@ -107,7 +110,7 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y) {
 }
 
 bool Chess::checkwin(int pos_x, int pos_y, int player) {
-    this->live_die = this->get_live_die(pos_x, pos_y);
+    this->live_die = this->get_live_die(pos_x, pos_y, player);
     for (int direct = 0 ; direct < 4 ; direct++) {
         if (this->live_die[direct].first >= 5) 
             return true;
@@ -115,6 +118,8 @@ bool Chess::checkwin(int pos_x, int pos_y, int player) {
     return false;
 }
 
+
+// init point chart
 void point_chart::_init_(){
     this->point[2][1] = 10;
     this->point[2][2] = 50;
@@ -127,6 +132,7 @@ void point_chart::_init_(){
     this->point[5][2] = 10000;
 }
 
+// init user player
 void user::_init_(int player){
     this->player = player;
 }
