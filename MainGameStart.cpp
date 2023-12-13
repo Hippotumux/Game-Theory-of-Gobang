@@ -1,7 +1,7 @@
 #include "gobang.h"
 
 Chess game;
-point_chart Score_chart;
+//point_chart Score;
 user player1;
 user player2;
 
@@ -9,6 +9,7 @@ int main(void) {
     // init two player
     player1._init_(1);
     player2._init_(2);
+   // Score._init_();
 
     bool running = true;
     while (running) {
@@ -31,7 +32,6 @@ int main(void) {
             running = false;
             break;
         }
-
         
         // next for player 2
         game.showboard();

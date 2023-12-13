@@ -11,7 +11,7 @@ void Chess::showboard() {
     }
 }
 
-std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y, int player) {
+std::vector<chess_coordinate> Chess::get_live_die(int pos_x, int pos_y, int player) {
     // left to right and up to doun
     int sum_leftright = 1, sum_leftright_live = 0, sum_updown = 1, sum_updown_live = 0;
     for (int shift = -1 ; shift >= -5, pos_x + shift > 0 ; shift --) {
@@ -101,7 +101,7 @@ std::vector<std::pair<int,int>> Chess::get_live_die(int pos_x, int pos_y, int pl
     }
 
     //return all situation
-    std::vector<std::pair<int,int>> result(4);
+    std::vector<chess_coordinate> result(4);
     result[0] = std::make_pair(sum_leftright, sum_leftright_live);
     result[1] = std::make_pair(sum_updown, sum_updown_live);
     result[2] = std::make_pair(sum_leftup, sum_leftup_live);
@@ -120,19 +120,30 @@ bool Chess::checkwin(int pos_x, int pos_y, int player) {
 
 
 // init point chart
-void point_chart::_init_(){
-    this->point[2][1] = 10;
-    this->point[2][2] = 50;
-    this->point[3][1] = 40;
-    this->point[3][2] = 100;
-    this->point[4][1] = 200;
-    this->point[4][2] = 1000;
-    this->point[5][0] = 10000;
-    this->point[5][1] = 10000;
-    this->point[5][2] = 10000;
-}
+// void point_chart::_init_(){
+//     this->point[2][1] = 10;
+//     this->point[2][2] = 50;
+//     this->point[3][1] = 40;
+//     this->point[3][2] = 100;
+//     this->point[4][1] = 200;
+//     this->point[4][2] = 1000;
+//     this->point[5][0] = 10000;
+//     this->point[5][1] = 10000;
+//     this->point[5][2] = 10000;
+// }
 
 // init user player
 void user::_init_(int player){
     this->player = player;
+}
+
+// init computer player
+void computer::_init_(int player) {
+    this->player = player;
+}
+
+
+// Computer choose
+void computer::Computer_Choose() {
+
 }

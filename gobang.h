@@ -4,6 +4,9 @@
 #include <iostream>
 #include <algorithm>
 #include <cstring>
+
+typedef std::pair<int,int> chess_coordinate;
+
 class Chess
 {
 public:
@@ -17,19 +20,19 @@ public:
     int chessboard[17][17] = {0};
 
     // 4 direction live and die;
-    std::vector<std::pair<int,int>> live_die;
-    std::vector<std::pair<int,int>> get_live_die(int pos_x, int pos_y, int player);
+    std::vector<chess_coordinate> live_die;
+    std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player);
     void showboard();
     bool checkwin(int pos_x, int pos_y, int player);
 };
 
-class point_chart
-{
-public:
-    // point[x][y] : x is the chess live, y is the chess die
-    int point[7][5] = {0};
-    void _init_();
-};
+// class point_chart
+// {
+// public:
+//     // point[x][y] : x is the chess live, y is the chess die
+//     int point[7][5] = {0};
+//     void _init_();
+// };
 
 class user: public Chess
 {
@@ -37,6 +40,14 @@ public:
     int choose_x, choose_y, player;
     void _init_(int player);
 };
+
+class computer: public Chess
+{
+public:
+    int choose_x, choose_y, player;
+    void _init_(int player);
+    std::pair<int,int> Computer_Choose(int* point);
+}
 
 /*
 class minmax_algorithm : public Chess
