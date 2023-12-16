@@ -27,15 +27,18 @@ void computer::_init_(int player, int round_size, int max_depth) {
 
 // Computer choose
 void computer::Computer_Choose() {
+    // reset best_value and eval_chessboard
     this->best_value = -1e8;
-    memset(this->eval, 0, sizeof(this->eval));
+    memset(this->eval_chessboard, 0, sizeof(this->eval_chessboard));
+
+    // output MAX point
     std::cout <<  "Max point:" 
         << this->minmax_algorithm(1, this->max_depth, this->player, this->chessboard) << std::endl;
     
     
-    for (int i = 1 ; i <= 15 ; i++) {
-        for (int j = 1 ; j <= 15 ; j++) {
-            printf("%6d", this->eval[j][i]);
+    for (int chess_y = 1 ; chess_y <= 15 ; chess_y++) {
+        for (int chess_x = 1 ; chess_x <= 15 ; chess_x++) {
+            printf("%6d", this->eval_chessboard[chess_x][chess_y]);
         }
         std::cout << std::endl;
     }

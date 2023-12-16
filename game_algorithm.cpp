@@ -173,7 +173,7 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
                         this->choose_x = chess_x;
                         this->choose_y = chess_y;
                     }
-                    this->eval[chess_x][chess_y] = point_max;
+                    this->eval_chessboard[chess_x][chess_y] = point_max;
                 }
             }
         }
