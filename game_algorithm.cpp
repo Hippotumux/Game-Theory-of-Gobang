@@ -1,25 +1,136 @@
 #include "game_algorithm.h"
-#include "gobang.h"
 
-bool game_algorithm::check_round(int pos_x, int pos_y, int round_size) {
-    if (chess[pos_x][pos_y] != 0) return false;
+
+std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player, int chessboard[17][17]) {
+    // left to right and up to doun
+    int sum_leftright = 1, sum_leftright_live = 0, sum_updown = 1, sum_updown_live = 0;
+    for (int shift = -1 ; shift >= -5, pos_x + shift > 0 ; shift --) {
+        if (chessboard[pos_x + shift][pos_y] == player) {
+            sum_leftright += 1;
+        } else if (chessboard[pos_x + shift][pos_y] == 0) {
+            sum_leftright_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+    for (int shift = -1 ; shift >= -5 && pos_y + shift > 0 ; shift --) {
+        if (chessboard[pos_x][pos_y + shift] == player) {
+            sum_updown += 1;
+        } else if (chessboard[pos_x][pos_y + shift] == 0) {
+            sum_updown_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 ; shift ++) {
+        if (chessboard[pos_x + shift][pos_y] == player) {
+            sum_leftright += 1;
+        } else if (chessboard[pos_x + shift][pos_y] == 0) {
+            sum_leftright_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 ; shift ++) {    
+        if (chessboard[pos_x][pos_y + shift] == player) {
+            sum_updown += 1;
+        } else if (chessboard[pos_x][pos_y + shift] == 0) {
+            sum_updown_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+
+    
+ 
+    // left up to left down and right down to right up 
+    int sum_leftup = 1, sum_leftup_live = 0, sum_rightup = 1, sum_rightup_live = 0;
+    for (int shift = -1 ; shift >= -5 && pos_x + shift > 0 && pos_y + shift > 0; shift --) {
+        if (chessboard[pos_x + shift][pos_y + shift] == player) {
+            sum_leftup += 1;
+        } else if (chessboard[pos_x + shift][pos_y + shift] == 0) {
+            sum_leftup_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+
+    for (int shift = -1 ; shift >= -5 && pos_x + shift > 0 && pos_y - shift <= 15; shift --) {
+        if (chessboard[pos_x + shift][pos_y - shift] == player) {
+            sum_rightup += 1;
+        } else if (chessboard[pos_x + shift][pos_y - shift] == 0) {
+            sum_rightup_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 && pos_y + shift <= 15 ; shift ++) {
+        if (chessboard[pos_x + shift][pos_y + shift] == player) {
+            sum_leftup += 1;
+        } else if (chessboard[pos_x + shift][pos_y + shift] == 0) {
+            sum_leftup_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+    for (int shift = 1; shift <= 5 && pos_x + shift <= 15 && pos_y - shift > 0 ; shift ++) {
+        if (chessboard[pos_x + shift][pos_y - shift] == player) {
+            sum_rightup += 1;
+        } else if (chessboard[pos_x + shift][pos_y - shift] == 0) {
+            sum_rightup_live += 1;
+            break;
+        } else {
+            break;
+        }
+    }
+
+    //return all situation
+    std::vector<chess_coordinate> result(4);
+    result[0] = std::make_pair(sum_leftright, sum_leftright_live);
+    result[1] = std::make_pair(sum_updown, sum_updown_live);
+    result[2] = std::make_pair(sum_leftup, sum_leftup_live);
+    result[3] = std::make_pair(sum_rightup, sum_rightup_live);
+    return result;
+}
+
+
+bool game_algorithm::checkwin(int pos_x, int pos_y, int player, int chessboard[17][17]) {
+    this->live_die = get_live_die(pos_x, pos_y, player, chessboard);
+    for (int direct = 0 ; direct < 4 ; direct++) {
+        if (this->live_die[direct].first >= 5)
+            return true;
+    }
+    return false;
+}
+
+
+bool check_round(int pos_x, int pos_y, int round_size, int chessboard[17][17]) {
+    if (chessboard[pos_x][pos_y] != 0) return false;
     for (int shift_x = -round_size ; shift_x <= round_size ; shift_x ++) {
         for (int shift_y = -round_size ; shift_y <= round_size ; shift_y ++) {
             if (pos_x + shift_x <= 0 || pos_x + shift_x > 15 || pos_y + shift_y < 0 || pos_y + shift_y > 15) continue;
-            if (this->chessboard[pos_x + shift_x][pos_y + shift_y] != 0) return true;
+            if (chessboard[pos_x + shift_x][pos_y + shift_y] != 0) return true;
         }
     }
     return false;
 }
 
-int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player) {
+int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int chessboard[17][17]) {
     if (depth >= max_depth) {
         int point_max = -1e8;
         for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
             for (int chess_x = 1 ; chess_x <= 15 ; chess_x ++) {
-                if (check_round(chess_x, chess_y, 1)) {
+                if (check_round(chess_x, chess_y, 1, chessboard)) {
                     int total_point = 0;
-                    this->live_die = this->get_live_die(chess_x, chess_y, player);
+                    this->live_die = get_live_die(chess_x, chess_y, player, chessboard);
                     for (auto item : this->live_die) {
                         total_point += this->value[item.first][item.second];
                     }
@@ -33,17 +144,17 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player) {
     int point_max = -1e8, point_min = 1e8;
     for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
         for (int chess_x = 1 ; chess_x <= 15 ; chess_x ++) {
-            if (check_round(chess_x, chess_y, this->roundsize)) {
-                if (this->checkwin(chess_x, chess_y, player)) {
+            if (check_round(chess_x, chess_y, this->round_size, chessboard)) {
+                if (this->checkwin(chess_x, chess_y, player, chessboard)) {
                     if (player == 2)
                         return this->winpoint;
                     else
                         return -1 * this->winpoint;
                 }
                 if (player == 2) {
-                    point_min = std::min(point_min, minmax_algorithm(depth, maxdepth, 1));
+                    point_min = std::min(point_min, minmax_algorithm(depth, maxdepth, 1, chessboard));
                 } else {
-                    point_max = std::max(point_max, minmax_algorithm(depth + 1, maxdepth, 2));
+                    point_max = std::max(point_max, minmax_algorithm(depth + 1, maxdepth, 2, chessboard));
                 }
 
                 if (player == 2 && depth == 1) {

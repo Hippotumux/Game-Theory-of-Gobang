@@ -11,13 +11,13 @@ int main(void) {
     // init two player
     player1._init_(1);
     //player2._init_(2);
-    Agent._init_(2, 3, 5);
-   // Score._init_();
+    Agent._init_(2, 3, 2);
+    // Score._init_();
 
     bool running = true;
     while (running) {
         // player 1 first
-        game.showboard();
+        showmap(game.chessboard);
         do {
             std::cout << "please player 1 choose x and y : "; 
             std::cin >> player1.choose_x >> player1.choose_y;
@@ -29,8 +29,8 @@ int main(void) {
         memcpy(player1.chessboard, game.chessboard, sizeof(game.chessboard));
         
         // check player2 whether win
-        if (player1.checkwin(player1.choose_x, player1.choose_y, player1.player)) {
-            game.showboard();
+        if (player1.checkwin(player1.choose_x, player1.choose_y, player1.player, player1.chessboard)) {
+            showmap(game.chessboard);
             std::cout << "player1 win";
             running = false;
             break;

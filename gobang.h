@@ -6,6 +6,7 @@
 #include "game_algorithm.h"
 
 typedef std::pair<int,int> chess_coordinate;
+void showmap (int chessboard[17][17]);
 
 class Chess
 {
@@ -20,10 +21,8 @@ public:
     int chessboard[17][17] = {0};
 
     // 4 direction live and die;
-    std::vector<chess_coordinate> live_die;
-    std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player);
-    void showboard();
-    bool checkwin(int pos_x, int pos_y, int player);
+    // std::vector<chess_coordinate> live_die;
+    // void showboard();
 };
 
 // class point_chart
@@ -34,7 +33,7 @@ public:
 //     void _init_();
 // };
 
-class user: public Chess
+class user: public Chess, public game_algorithm
 {
 public:
     int choose_x, choose_y, player;
