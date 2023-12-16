@@ -129,7 +129,7 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
         for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
             for (int chess_x = 1 ; chess_x <= 15 ; chess_x ++) {
                 if (check_round(chess_x, chess_y, 1, chessboard)) {
-                    int total_point = 0;
+                    int total_point = 0; 
                     this->live_die = get_live_die(chess_x, chess_y, player, chessboard);
                     for (auto item : this->live_die) {
                         total_point += this->value[item.first][item.second];
@@ -144,33 +144,46 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
     int point_max = -1e8, point_min = 1e8;
     for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
         for (int chess_x = 1 ; chess_x <= 15 ; chess_x ++) {
+            if (player == 2 && depth == 1) point_max = -1e8;
+
             if (check_round(chess_x, chess_y, this->round_size, chessboard)) {
                 if (this->checkwin(chess_x, chess_y, player, chessboard)) {
+                    if (depth == 1) {
+                        this->choose_x = chess_x;
+                        this->choose_y = chess_y;
+                    }
                     if (player == 2)
                         return this->winpoint;
                     else
                         return -1 * this->winpoint;
                 }
                 if (player == 2) {
-                    point_min = std::min(point_min, minmax_algorithm(depth, maxdepth, 1, chessboard));
+                    chessboard[chess_x][chess_y] = player;
+                    point_max = std::max(point_max, minmax_algorithm(depth , maxdepth, 1, chessboard));
+                    chessboard[chess_x][chess_y] = 0;
                 } else {
-                    point_max = std::max(point_max, minmax_algorithm(depth + 1, maxdepth, 2, chessboard));
+                    chessboard[chess_x][chess_y] = player;
+                    point_min = std::min(point_min, minmax_algorithm(depth + 1, maxdepth, 2, chessboard));
+                    chessboard[chess_x][chess_y] = 0;
                 }
 
                 if (player == 2 && depth == 1) {
-                    if (point_min > this->best_value) {
-                        this->best_value = point_min;
+                    if (point_max > this->best_value) {
+                        this->best_value = point_max;
                         this->choose_x = chess_x;
                         this->choose_y = chess_y;
                     }
-                } 
+                    this->eval[chess_x][chess_y] = point_max;
+                }
             }
         }
     }
+    
+    if (player == 2 && depth == 1) return best_value;
     if (player == 2) {
-        return point_min;
-    } else {
         return point_max;
+    } else {
+        return point_min;
     }
 }
 

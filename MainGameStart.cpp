@@ -11,7 +11,9 @@ int main(void) {
     // init two player
     player1._init_(1);
     //player2._init_(2);
-    Agent._init_(2, 3, 2);
+    
+    // init(player, roundsize, depth)
+    Agent._init_(2, 1, 3);
     // Score._init_();
 
     bool running = true;
@@ -38,8 +40,7 @@ int main(void) {
 
         memcpy(Agent.chessboard, game.chessboard, sizeof(game.chessboard));
         Agent.Computer_Choose();
-        std::cout << "Computer choose " << Agent.choose_x << " " << Agent.choose_y << std::endl;
-        
+        std::cout << "Computer choose " << Agent.choose_x << " " << Agent.choose_y << std::endl; 
         game.chessboard[Agent.choose_x][Agent.choose_y] = Agent.player;
 
         /*

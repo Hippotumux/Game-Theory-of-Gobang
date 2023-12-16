@@ -12,6 +12,7 @@ class game_algorithm
 public:
     int choose_x, choose_y, round_size, best_value = -1e8, max_depth;
     int value[7][5] = {0};
+    int eval[17][17] = {0};
     std::vector<chess_coordinate> live_die;
     const int winpoint = 10000;
     game_algorithm() {
