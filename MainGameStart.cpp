@@ -40,7 +40,7 @@ int main(void) {
 
         memcpy(Agent.chessboard, game.chessboard, sizeof(game.chessboard));
         Agent.Computer_Choose();
-        std::cout << "Computer choose " << Agent.choose_x << " " << Agent.choose_y << std::endl; 
+        std::cout << "Computer choose to (x, y) :" << Agent.choose_x << " " << Agent.choose_y << std::endl; 
         game.chessboard[Agent.choose_x][Agent.choose_y] = Agent.player;
 
         /*
@@ -64,8 +64,6 @@ int main(void) {
             break;
         }
         */
-
-
     }
 }
 

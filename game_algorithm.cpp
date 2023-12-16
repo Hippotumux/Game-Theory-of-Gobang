@@ -179,7 +179,7 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
         }
     }
     
-    if (player == 2 && depth == 1) return best_value;
+    if (player == 2  && depth == 1) return best_value;
     if (player == 2) {
         return point_max;
     } else {
