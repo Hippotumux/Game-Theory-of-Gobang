@@ -10,25 +10,30 @@ motivated to develop my own computerized Gobang game for
 challenging player interactions. Therefore, this project involves
 developing a computerized Gobang game.
 
-## 本章內容
+## Content 
 
-- 1
-- 2
--3 
-
-//備註：此篇的實作並不是使用 python 而是用 c++
-
-## 簡介
+- Introduction
+- Method
+- conclusion 
+- Reference
 
 
-## 標題
+## Introduction
+
+Gobang, also known as Five in a Row, is a classic board game
+with a rich history. This project we will use game algorithms to
+make the computer to play gobang with us.
+
+## score system 
 
 
-## 名詞介紹
+## evaluate
 
 
+## Method
 
-## 流程
+
+## 
 
 
 ## 實作介紹
@@ -37,10 +42,10 @@ developing a computerized Gobang game.
 ### 變數設定
 
 
-### 結果
+### Result
 
 
-## 聯絡作者
+## About me
 
 我是河馬 ~~ 很高興認識大家，如果有任何疑問請使用以下方式來聯絡我
 
