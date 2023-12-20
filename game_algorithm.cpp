@@ -101,7 +101,7 @@ std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player, int
     return result;
 }
 
-
+// check win 
 bool game_algorithm::checkwin(int pos_x, int pos_y, int player, int chessboard[17][17]) {
     this->live_die = get_live_die(pos_x, pos_y, player, chessboard);
     for (int direct = 0 ; direct < 4 ; direct++) {
@@ -112,6 +112,7 @@ bool game_algorithm::checkwin(int pos_x, int pos_y, int player, int chessboard[1
 }
 
 
+// check the coordinate round whether exist another;
 bool check_round(int pos_x, int pos_y, int round_size, int chessboard[17][17]) {
     if (chessboard[pos_x][pos_y] != 0) return false;
     for (int shift_x = -round_size ; shift_x <= round_size ; shift_x ++) {
@@ -123,6 +124,7 @@ bool check_round(int pos_x, int pos_y, int round_size, int chessboard[17][17]) {
     return false;
 }
 
+// minmax 
 int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int chessboard[17][17]) {
     if (depth >= max_depth) {
         int point_max = -1e8;
@@ -168,6 +170,7 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
                 }
 
                 if (player == 2 && depth == 1) {
+                    point_max *= this->weight[chess_x][chess_y];
                     if (point_max > this->best_value) {
                         this->best_value = point_max;
                         this->choose_x = chess_x;
@@ -178,8 +181,9 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
             }
         }
     }
-    
+
     if (player == 2  && depth == 1) return best_value;
+    
     if (player == 2) {
         return point_max;
     } else {
