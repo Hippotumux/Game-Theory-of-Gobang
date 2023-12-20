@@ -6,7 +6,7 @@
 #include "game_algorithm.h"
 
 typedef std::pair<int,int> chess_coordinate;
-void showmap (int chessboard[17][17]);
+void showmap (int chessboard[17][17], int choose_x, int choose_y);
 
 class Chess
 {

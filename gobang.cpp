@@ -1,17 +1,19 @@
 #include "gobang.h"
 
-void showmap (int chessboard[17][17]) {
+void showmap (int chessboard[17][17], int choose_x, int choose_y) {
     for (int board_y = 0 ; board_y <= 15 ; board_y++) {
         for (int board_x = 0 ; board_x <= 15 ; board_x++) {
             if (board_x == 0) printf("%5d", board_y);
             else if (board_y == 0) printf("%5d", board_x); 
             else {
-                if (chessboard[board_x][board_y] == 0) {
-                    printf("   ‧");
+                if (board_x == choose_x && board_y == choose_y) {
+                    printf("    ◎");
+                } else if (chessboard[board_x][board_y] == 0) {
+                    printf("    ‧");
                 } else if (chessboard[board_x][board_y] == 1) {
-                    printf("   ●");
+                    printf("    ●");
                 } else {
-                    printf("   ○");
+                    printf("    ○");
                 }
             }
         }
@@ -40,9 +42,13 @@ void computer::Computer_Choose() {
     memset(this->eval_chessboard, 0, sizeof(this->eval_chessboard));
 
     // output MAX point
+    /*
     std::cout <<  "Max point:" 
         << this->minmax_algorithm(1, this->max_depth, this->player, this->chessboard) << std::endl;
+    */ 
     
+    std::cout << "Max point:" 
+        << this->alpha_beta_pruning({-1e8, 1e8}, 1, this->max_depth, this->player, this->chessboard) << std::endl; 
     
     for (int chess_y = 1 ; chess_y <= 15 ; chess_y++) {
         for (int chess_x = 1 ; chess_x <= 15 ; chess_x++) {

@@ -1,6 +1,8 @@
 #include "game_algorithm.h"
 
 
+std::mt19937 rng(std::random_device{}());
+
 std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player, int chessboard[17][17]) {
     // left to right and up to doun
     int sum_leftright = 1, sum_leftright_live = 0, sum_updown = 1, sum_updown_live = 0;
@@ -191,8 +193,9 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
     }
 }
 
-int game_algorithm::alpha_beta_pruning(alpha_beta last_eval, int depth, int max_depth, int player, int chessboard[17][17]) {
-    alpha_beta now_eval = last_eval;
+// alpha: min  beta:max   
+int game_algorithm::alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxdepth, int player, int chessboard[17][17]) {
+    AlphaBeta now_eval = last_eval;
     if (depth >= max_depth) {
         int point_max = -1e8;
         for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
@@ -203,7 +206,7 @@ int game_algorithm::alpha_beta_pruning(alpha_beta last_eval, int depth, int max_
                     for (auto item : this->live_die) {
                         total_point += this->value[item.first][item.second];
                     }
-                    point_max = std::max(point_max, total_point);   
+                    point_max = std::max(point_max, total_point);
                 }
             }
         }
@@ -221,48 +224,53 @@ int game_algorithm::alpha_beta_pruning(alpha_beta last_eval, int depth, int max_
                         this->choose_y = chess_y;
                     }
                     if (player == 2)
-                        return this->winpoint;
+                        return this->winpoint * 1.2;
                     else
-                        return -1 * this->winpoint;
+                        return -1 * this->winpoint * 1.2;
                 }
 
                 if (player == 2) {
                     chessboard[chess_x][chess_y] = player;
-                    int return_point = minmax_algorithm(depth , maxdepth, 1, chessboard);
-                    eval.beta = std::max(eval.beta, return_point);
+                    int return_point = alpha_beta_pruning(now_eval, depth , maxdepth, 1, chessboard);
+                    now_eval.alpha = std::max(now_eval.alpha, return_point);
                     chessboard[chess_x][chess_y] = 0;
                 } else {
                     chessboard[chess_x][chess_y] = player;
-                    int return_point = minmax_algorithm(depth + 1, maxdepth, 2, chessboard);
-                    eval.alpha = std::min(eval.alpha, return_point);
+                    int return_point = alpha_beta_pruning(now_eval, depth + 1, maxdepth, 2, chessboard);
+                    now_eval.beta = std::min(now_eval.beta, return_point);
                     chessboard[chess_x][chess_y] = 0;
                 }
                 
                 // Here is my last edit situation
-                
-                if (eval.alpha <= eval.beta) {
-                    return -12345;
+                if (now_eval.alpha >= now_eval.beta) {
+                    if (player == 2) {
+                        return now_eval.alpha;
+                    } else {
+                        return now_eval.beta;
+                    }
                 }
 
                 if (player == 2 && depth == 1) {
-                    point_max *= this->weight[chess_x][chess_y];
-                    if (point_max > this->best_value) {
-                        this->best_value = point_max;
+                    now_eval.alpha = (now_eval.alpha * this->weight[chess_x][chess_y] * (10 + rng() % 10)) / 10;
+                    if (now_eval.alpha > this->best_value) {
+                        this->best_value = now_eval.alpha;
                         this->choose_x = chess_x;
                         this->choose_y = chess_y;
                     }
-                    this->eval_chessboard[chess_x][chess_y] = point_max;
+                    this->eval_chessboard[chess_x][chess_y] = now_eval.alpha;
+                    now_eval = std::make_pair(-1e8, 1e8);
                 }
             }
+        showmap(game.chessboard, 0, 0);
         }
     }
 
     if (player == 2  && depth == 1) return best_value;
     
     if (player == 2) {
-        return point_max;
+        return now_eval.alpha;
     } else {
-        return point_min;
+        return now_eval.beta;
     }    
 }
 

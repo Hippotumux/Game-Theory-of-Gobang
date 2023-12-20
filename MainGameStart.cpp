@@ -14,17 +14,22 @@ int main(void) {
     
     // init(player, roundsize, depth)
     Agent._init_(2, 1, 3);
+
     // Score._init_();
 
     bool running = true;
+    showmap(game.chessboard, 0, 0);
     while (running) {
         // player 1 first
-        showmap(game.chessboard);
+        
+        // check the coordinate (x, y) is empty
         do {
             std::cout << "please player 1 choose x and y : "; 
             std::cin >> player1.choose_x >> player1.choose_y;
             if (player1.choose_x < 0 || player1.choose_y < 0 || player1.choose_x > 15 || player1.choose_y > 15) continue; 
         } while (game.chessboard[player1.choose_x][player1.choose_y] != 0);
+        
+        // play chess 
         game.chessboard[player1.choose_x][player1.choose_y] = player1.player;
 
         // copy game chessboard to player chess board
@@ -32,29 +37,41 @@ int main(void) {
         
         // check player2 whether win
         if (player1.checkwin(player1.choose_x, player1.choose_y, player1.player, game.chessboard)) {
-            showmap(game.chessboard);
+            showmap(game.chessboard, player1.choose_x, player1.choose_y);
             std::cout << "player1 win" << std::endl;
             running = false;
             break;
         }
+        
+        /* 
+            change to computer choose 
+            use alpha-beta pruning algorithm 
+        */
 
+        // copy gameboard
         memcpy(Agent.chessboard, game.chessboard, sizeof(game.chessboard));
+        
+        // computer choose 
         Agent.Computer_Choose();
         std::cout << "Computer choose to (x, y) :" << Agent.choose_x << " " << Agent.choose_y << std::endl; 
         game.chessboard[Agent.choose_x][Agent.choose_y] = Agent.player;
         
-        // check Agent whether win 
+        // check computer whether win 
         if (Agent.checkwin(Agent.choose_x, Agent.choose_y, Agent.player, game.chessboard)) {
-            showmap(game.chessboard);
+            showmap(game.chessboard, Agent.choose_x, Agent.choose_y);
             std::cout << "Computer win" << std::endl;
             running = false;
             break;
         }
-
+        
+        showmap(game.chessboard, 0, 0);
+        // showmap to player1 
+        showmap(game.chessboard, Agent.choose_x, Agent.choose_y);
 
 
         /*
         // next for player 2
+        showmap(game.chessboard, 0, 0);
         game.showboard();
         do{
             std::cout << "please player 2 choose x and y : "; 

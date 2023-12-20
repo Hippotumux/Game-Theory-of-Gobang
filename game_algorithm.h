@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <ctime>
+#include <random>
+
 
 typedef std::pair<int,int> chess_coordinate;
 typedef std::pair<int,int> AlphaBeta;
@@ -23,7 +26,7 @@ public:
     game_algorithm() {
         this->value[1][1] = 3;
         this->value[1][2] = 5;
-        this->value[2][1] = 10;
+        this->value[2][1] = 10; 
         this->value[2][2] = 50;
         this->value[3][1] = 40;
         this->value[3][2] = 100; 
@@ -47,7 +50,7 @@ public:
     }
     bool checkwin (int pos_x, int pos_y, int player, int chessboard[17][17]);
     int minmax_algorithm(int depth, int maxdepth, int player, int chessboard[17][17]);
-    AlphaBeta alpha_beta_pruning();
+    int alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxdepth, int player, int chessboard[17][17]);
     chess_coordinate optimization_alpha_beta_pruning();
 };
 
