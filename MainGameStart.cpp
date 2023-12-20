@@ -31,9 +31,9 @@ int main(void) {
         memcpy(player1.chessboard, game.chessboard, sizeof(game.chessboard));
         
         // check player2 whether win
-        if (player1.checkwin(player1.choose_x, player1.choose_y, player1.player, player1.chessboard)) {
+        if (player1.checkwin(player1.choose_x, player1.choose_y, player1.player, game.chessboard)) {
             showmap(game.chessboard);
-            std::cout << "player1 win";
+            std::cout << "player1 win" << std::endl;
             running = false;
             break;
         }
@@ -42,6 +42,16 @@ int main(void) {
         Agent.Computer_Choose();
         std::cout << "Computer choose to (x, y) :" << Agent.choose_x << " " << Agent.choose_y << std::endl; 
         game.chessboard[Agent.choose_x][Agent.choose_y] = Agent.player;
+        
+        // check Agent whether win 
+        if (Agent.checkwin(Agent.choose_x, Agent.choose_y, Agent.player, game.chessboard)) {
+            showmap(game.chessboard);
+            std::cout << "Computer win" << std::endl;
+            running = false;
+            break;
+        }
+
+
 
         /*
         // next for player 2

@@ -1,11 +1,19 @@
 #include "gobang.h"
 
 void showmap (int chessboard[17][17]) {
-    for (int board_y = 0 ; board_y < 17 ; board_y++) {
-        for (int board_x = 0 ; board_x < 17 ; board_x++) {
+    for (int board_y = 0 ; board_y <= 15 ; board_y++) {
+        for (int board_x = 0 ; board_x <= 15 ; board_x++) {
             if (board_x == 0) printf("%5d", board_y);
             else if (board_y == 0) printf("%5d", board_x); 
-            else printf("%5d", chessboard[board_x][board_y]);
+            else {
+                if (chessboard[board_x][board_y] == 0) {
+                    printf("   ‧");
+                } else if (chessboard[board_x][board_y] == 1) {
+                    printf("   ●");
+                } else {
+                    printf("   ○");
+                }
+            }
         }
         std::cout << std::endl;
     }
