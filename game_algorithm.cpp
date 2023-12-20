@@ -191,9 +191,79 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
     }
 }
 
-chess_coordinate game_algorithm::alpha_beta_pruning() {
-    chess_coordinate test;
-    return test;
+int game_algorithm::alpha_beta_pruning(alpha_beta last_eval, int depth, int max_depth, int player, int chessboard[17][17]) {
+    alpha_beta now_eval = last_eval;
+    if (depth >= max_depth) {
+        int point_max = -1e8;
+        for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
+            for (int chess_x = 1 ; chess_x <= 15 ; chess_x ++) {
+                if (check_round(chess_x, chess_y, 1, chessboard)) {
+                    int total_point = 0; 
+                    this->live_die = get_live_die(chess_x, chess_y, player, chessboard);
+                    for (auto item : this->live_die) {
+                        total_point += this->value[item.first][item.second];
+                    }
+                    point_max = std::max(point_max, total_point);   
+                }
+            }
+        }
+        return point_max;
+    }
+
+    for (int chess_y = 1 ; chess_y <= 15 ; chess_y ++) {
+        for (int chess_x = 1 ; chess_x <= 15 ; chess_x ++) {
+
+            if (check_round(chess_x, chess_y, this->round_size, chessboard)) {
+                // check win 
+                if (this->checkwin(chess_x, chess_y, player, chessboard)) {
+                    if (depth == 1) {
+                        this->choose_x = chess_x;
+                        this->choose_y = chess_y;
+                    }
+                    if (player == 2)
+                        return this->winpoint;
+                    else
+                        return -1 * this->winpoint;
+                }
+
+                if (player == 2) {
+                    chessboard[chess_x][chess_y] = player;
+                    int return_point = minmax_algorithm(depth , maxdepth, 1, chessboard);
+                    eval.beta = std::max(eval.beta, return_point);
+                    chessboard[chess_x][chess_y] = 0;
+                } else {
+                    chessboard[chess_x][chess_y] = player;
+                    int return_point = minmax_algorithm(depth + 1, maxdepth, 2, chessboard);
+                    eval.alpha = std::min(eval.alpha, return_point);
+                    chessboard[chess_x][chess_y] = 0;
+                }
+                
+                // Here is my last edit situation
+                
+                if (eval.alpha <= eval.beta) {
+                    return -12345;
+                }
+
+                if (player == 2 && depth == 1) {
+                    point_max *= this->weight[chess_x][chess_y];
+                    if (point_max > this->best_value) {
+                        this->best_value = point_max;
+                        this->choose_x = chess_x;
+                        this->choose_y = chess_y;
+                    }
+                    this->eval_chessboard[chess_x][chess_y] = point_max;
+                }
+            }
+        }
+    }
+
+    if (player == 2  && depth == 1) return best_value;
+    
+    if (player == 2) {
+        return point_max;
+    } else {
+        return point_min;
+    }    
 }
 
 chess_coordinate game_algorithm::optimization_alpha_beta_pruning() {

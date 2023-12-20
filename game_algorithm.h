@@ -3,6 +3,10 @@
 #include <vector>
 
 typedef std::pair<int,int> chess_coordinate;
+typedef std::pair<int,int> AlphaBeta;
+
+#define alpha first
+#define beta second
 
 std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player, int chessboard[17][17]);
 bool check_round (int pos_x, int pos_y, int round_size, int chessboard[17][17]);
@@ -43,7 +47,7 @@ public:
     }
     bool checkwin (int pos_x, int pos_y, int player, int chessboard[17][17]);
     int minmax_algorithm(int depth, int maxdepth, int player, int chessboard[17][17]);
-    chess_coordinate alpha_beta_pruning();
+    AlphaBeta alpha_beta_pruning();
     chess_coordinate optimization_alpha_beta_pruning();
 };
 
