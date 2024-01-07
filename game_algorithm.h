@@ -3,6 +3,7 @@
 #include <vector>
 #include <ctime>
 #include <random>
+#include <algorithm>
 
 
 typedef std::pair<int,int> chess_coordinate;
