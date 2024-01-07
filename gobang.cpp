@@ -42,10 +42,9 @@ void computer::Computer_Choose() {
     memset(this->eval_chessboard, 0, sizeof(this->eval_chessboard));
 
     // output MAX point
-    /*
-    std::cout <<  "Max point:" 
-        << this->minmax_algorithm(1, this->max_depth, this->player, this->chessboard) << std::endl;
-    */ 
+    
+    //std::cout <<  "Max point:" 
+    //    << this->minmax_algorithm(1, this->max_depth, this->player, this->chessboard) << std::endl;
     
     std::cout << "Max point:" 
         << this->alpha_beta_pruning({-1e8, 1e8}, 1, this->max_depth, this->player, this->chessboard) << std::endl; 

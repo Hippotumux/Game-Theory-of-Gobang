@@ -1,6 +1,5 @@
 #include "game_algorithm.h"
 
-
 std::mt19937 rng(std::random_device{}());
 
 std::vector<chess_coordinate> get_live_die(int pos_x, int pos_y, int player, int chessboard[17][17]) {
@@ -172,7 +171,7 @@ int game_algorithm::minmax_algorithm(int depth, int maxdepth, int player, int ch
                 }
 
                 if (player == 2 && depth == 1) {
-                    point_max *= this->weight[chess_x][chess_y];
+                    point_max = (point_max * this->weight[chess_x][chess_y] * (10+rng()%10))/10;
                     if (point_max > this->best_value) {
                         this->best_value = point_max;
                         this->choose_x = chess_x;
@@ -261,7 +260,6 @@ int game_algorithm::alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxde
                     now_eval = std::make_pair(-1e8, 1e8);
                 }
             }
-        showmap(game.chessboard, 0, 0);
         }
     }
 

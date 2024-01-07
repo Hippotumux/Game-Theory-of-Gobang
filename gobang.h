@@ -11,27 +11,11 @@ void showmap (int chessboard[17][17], int choose_x, int choose_y);
 class Chess
 {
 public:
-    // chessboard width and length
     int width = 15, length = 15;
-    
-    // player1 user, player2 computer 
     int player;
-
-    // 0 : empty, 1 : player1, 2 : player2
     int chessboard[17][17] = {0};
-
-    // 4 direction live and die;
-    // std::vector<chess_coordinate> live_die;
-    // void showboard();
 };
 
-// class point_chart
-// {
-// public:
-//     // point[x][y] : x is the chess live, y is the chess die
-//     int point[7][5] = {0};
-//     void _init_();
-// };
 
 class user: public Chess, public game_algorithm
 {
@@ -47,10 +31,3 @@ public:
     void Computer_Choose();
 };
 
-/*
-class minmax_algorithm : public Chess
-{
-public:
-    
-}
-*/

@@ -16,7 +16,6 @@ int main(void) {
     Agent._init_(2, 1, 3);
 
     // Score._init_();
-
     bool running = true;
     showmap(game.chessboard, 0, 0);
     while (running) {
@@ -27,7 +26,8 @@ int main(void) {
             std::cout << "please player 1 choose x and y : "; 
             std::cin >> player1.choose_x >> player1.choose_y;
             if (player1.choose_x < 0 || player1.choose_y < 0 || player1.choose_x > 15 || player1.choose_y > 15) continue; 
-        } while (game.chessboard[player1.choose_x][player1.choose_y] != 0);
+            if (game.chessboard[player1.choose_x][player1.choose_y] == 0) break;
+        } while (true);
         
         // play chess 
         game.chessboard[player1.choose_x][player1.choose_y] = player1.player;
@@ -64,7 +64,7 @@ int main(void) {
             break;
         }
         
-        showmap(game.chessboard, 0, 0);
+        //showmap(game.chessboard, 0, 0);
         // showmap to player1 
         showmap(game.chessboard, Agent.choose_x, Agent.choose_y);
 
