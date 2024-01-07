@@ -272,7 +272,116 @@ int game_algorithm::alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxde
     }    
 }
 
-chess_coordinate game_algorithm::optimization_alpha_beta_pruning() {
-    chess_coordinate test;
-    return test;
+int game_algorithm::optimization_alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxdepth, int player, int chessboard[17][17]) {
+    AlphaBeta now_eval = last_eval;
+    if (depth >= max_depth) {
+        int point_max = -1e8;
+        for (int chess_y = 1; chess_y <= 15; chess_y++) {
+            for (int chess_x = 1; chess_x <= 15; chess_x++) {
+                if (check_round(chess_x, chess_y, 1, chessboard)) {
+                    int total_point = 0;
+                    this->live_die = get_live_die(chess_x, chess_y, player, chessboard);
+                    for (auto item : this->live_die) {
+                        total_point += this->value[item.first][item.second];
+                    }
+                    point_max = std::max(point_max, total_point);
+                }
+            }
+        }
+        return point_max;
+    }
+
+
+    std::vector<std::pair<int,chess_coordinate>> priority_chess;
+    for (int chess_y = 1; chess_y <= 15; chess_y++) {
+        for (int chess_x = 1; chess_x <= 15; chess_x++) {
+            int chess_size = 1;
+            if (depth == 1 && player == 2) {
+                chess_size = this->round_size;
+            }
+            if (check_round(chess_x, chess_y, chess_size, chessboard)) {
+                int total_point = 0;
+                if (rng() % 10 < 3) total_point = 300;
+                this->live_die = get_live_die(chess_x, chess_y, 1, chessboard);
+                for (auto item : this->live_die) {
+                    total_point += this->value[item.first][item.second];
+                }
+                this->live_die = get_live_die(chess_x, chess_y, 2, chessboard);
+                for (auto item : this->live_die) {
+                    total_point += this->value[item.first][item.second];
+                }
+                priority_chess.push_back({ total_point, { chess_x, chess_y } });
+            }
+        }
+    }
+
+    std::sort(priority_chess.begin(), priority_chess.end(), [&](std::pair<int, chess_coordinate> F, std::pair<int, chess_coordinate> S) {
+        return F.first > S.first;
+        });
+
+    int max_times = 20, now_times = 0;
+    if (player == 2 && depth == 1) {
+        max_times = priority_chess.size();
+    }
+    for (std::pair<int, chess_coordinate> chess_choose : priority_chess) {
+        now_times++;
+        if (now_times > max_times) break;
+        int chess_x = chess_choose.second.first;
+        int chess_y = chess_choose.second.second;
+
+        // check win 
+        if (this->checkwin(chess_x, chess_y, player, chessboard)) {
+            if (depth == 1) {
+                this->choose_x = chess_x;
+                this->choose_y = chess_y;
+            }
+            if (player == 2)
+                return this->winpoint * 1.2;
+            else
+                return -1 * this->winpoint * 1.2;
+        }
+
+        if (player == 2) {
+            chessboard[chess_x][chess_y] = player;
+            int return_point = optimization_alpha_beta_pruning(now_eval, depth, maxdepth, 1, chessboard);
+            now_eval.alpha = std::max(now_eval.alpha, return_point);
+            chessboard[chess_x][chess_y] = 0;
+        }
+        else {
+            chessboard[chess_x][chess_y] = player;
+            int return_point = optimization_alpha_beta_pruning(now_eval, depth + 1, maxdepth, 2, chessboard);
+            now_eval.beta = std::min(now_eval.beta, return_point);
+            chessboard[chess_x][chess_y] = 0;
+        }
+
+        // Here is my last edit situation
+        if (now_eval.alpha >= now_eval.beta) {
+            if (player == 2) {
+                return now_eval.alpha;
+            }
+            else {
+                return now_eval.beta;
+            }
+        }
+
+        if (player == 2 && depth == 1) {
+            now_eval.alpha = (now_eval.alpha * this->weight[chess_x][chess_y] * (10 + rng() % 10)) / 10;
+            if (now_eval.alpha > this->best_value) {
+                this->best_value = now_eval.alpha;
+                this->choose_x = chess_x;
+                this->choose_y = chess_y;
+            }
+            this->eval_chessboard[chess_x][chess_y] = now_eval.alpha;
+            now_eval = std::make_pair(-1e8, 1e8);
+        }
+    }
+
+    if (player == 2 && depth == 1) return best_value;
+
+    if (player == 2) {
+        return now_eval.alpha;
+    }
+    else {
+        return now_eval.beta;
+    }
 }
