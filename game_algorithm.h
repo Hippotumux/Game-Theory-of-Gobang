@@ -51,6 +51,6 @@ public:
     bool checkwin (int pos_x, int pos_y, int player, int chessboard[17][17]);
     int minmax_algorithm(int depth, int maxdepth, int player, int chessboard[17][17]);
     int alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxdepth, int player, int chessboard[17][17]);
-    chess_coordinate optimization_alpha_beta_pruning();
+    int optimization_alpha_beta_pruning(AlphaBeta last_eval, int depth, int maxdepth, int player, int chessboard[17][17]);
 };
 
