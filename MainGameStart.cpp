@@ -25,7 +25,7 @@ int main(void) {
         do {
             std::cout << "please player 1 choose x and y : "; 
             std::cin >> player1.choose_x >> player1.choose_y;
-            if (player1.choose_x < 0 || player1.choose_y < 0 || player1.choose_x > 15 || player1.choose_y > 15) continue; 
+            if (player1.choose_x <= 0 || player1.choose_y <= 0 || player1.choose_x > 15 || player1.choose_y > 15) continue; 
             if (game.chessboard[player1.choose_x][player1.choose_y] == 0) break;
         } while (true);
         
