@@ -43,11 +43,15 @@ void computer::Computer_Choose() {
 
     // output MAX point
     
-    //std::cout <<  "Max point:" 
+    //std::cout <<  "minimax -> Max point:" 
     //    << this->minmax_algorithm(1, this->max_depth, this->player, this->chessboard) << std::endl;
-    
-    std::cout << "Max point:" 
-        << this->alpha_beta_pruning({-1e8, 1e8}, 1, this->max_depth, this->player, this->chessboard) << std::endl; 
+
+   // std::cout << "A-Bpruning -> Max point:"
+    //    << this->alpha_beta_pruning({ -1e8, 1e8 }, 1, this->max_depth, this->player, this->chessboard) << std::endl;
+
+    std::cout << "optimization_alpha_beta_pruning -> Max point:"
+        << this->optimization_alpha_beta_pruning({ -1e8, 1e8 }, 1, this->max_depth, this->player, this->chessboard) << std::endl;
+
     
     for (int chess_y = 1 ; chess_y <= 15 ; chess_y++) {
         for (int chess_x = 1 ; chess_x <= 15 ; chess_x++) {
